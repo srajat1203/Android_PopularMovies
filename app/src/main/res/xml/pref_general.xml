@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="@string/pref_order_key"
+        android:title="@string/pref_order_title"
+        android:dialogTitle="Order Movies By:"
+        android:entries="@array/orderOptions"
+        android:entryValues="@array/orderOptionsValues"
+        android:defaultValue="@string/pref_order_default" />
+
+</PreferenceScreen>
