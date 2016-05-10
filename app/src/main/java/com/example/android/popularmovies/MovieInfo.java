@@ -14,15 +14,17 @@ public class MovieInfo implements Serializable {
     String plot;
     String rating;
     String releaseDate;
+    String id;
 
 
-    public MovieInfo(String imageUrl, String title, String plot, String rating, String releaseDate){
+    public MovieInfo(String imageUrl, String title, String plot, String rating, String releaseDate, String id){
 
         this.imageUrl = imageUrl;
         this.title = title;
         this.plot = plot;
         this.rating = rating;
         this.releaseDate = releaseDate;
+        this.id = id;
     }
     public String getImageUrl() {
         return imageUrl;
@@ -63,6 +65,16 @@ public class MovieInfo implements Serializable {
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+
 
 
 
