@@ -45,6 +45,7 @@ public class FetchTrailersTask extends AsyncTask<MovieInfo, Void, List<TrailersI
         String trailersJsonStr = null;
         MovieInfo curMovie = params[0];
         final String movieId = curMovie.getId();
+        Log.v(LOG_TAG, "Movie id:" + movieId);
 
 
         try {
@@ -93,7 +94,7 @@ public class FetchTrailersTask extends AsyncTask<MovieInfo, Void, List<TrailersI
             }
             trailersJsonStr = buffer.toString();
 
-            Log.v(LOG_TAG, "Movie JSON String: " + trailersJsonStr);
+            Log.v(LOG_TAG, "Trailer JSON String: " + trailersJsonStr);
 
 
         } catch (IOException e) {
@@ -148,8 +149,8 @@ public class FetchTrailersTask extends AsyncTask<MovieInfo, Void, List<TrailersI
             // Get the JSON object representing the day
             JSONObject trailer = trailersArray.getJSONObject(i);
 
-            trailerTitle = trailer.getString("key");
-            trailerUrl = trailer.getString("id");
+            trailerTitle = trailer.getString("name");
+            trailerUrl = trailer.getString("key");
 
             TrailersInfo trailersInfo = new TrailersInfo(trailerTitle, trailerUrl);
 
@@ -176,5 +177,10 @@ public class FetchTrailersTask extends AsyncTask<MovieInfo, Void, List<TrailersI
             }
         }
     }
+
+
+
+
+
 
 }

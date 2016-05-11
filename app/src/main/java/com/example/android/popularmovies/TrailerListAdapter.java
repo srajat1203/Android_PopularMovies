@@ -32,17 +32,11 @@ public class TrailerListAdapter extends ArrayAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.listview_trailers_item, parent, false);
-            //imgView = (ImageView) convertView.findViewById(R.id.gridViewItem);
-            //convertView= (ImageView) rootView.findViewById(R.id.gridViewItem);
 
-
-
-            //trailerTitle.setText(trailersList.get(position).getTrailerTitle());
             ((TextView) convertView.findViewById(R.id.trailerTitle)).setText(trailersList.get(position).getTrailerTitle());
 
         }
-//trailersList.get(position).getTrailerTitle()
-        //((TextView) convertView.findViewById(R.id.trailerTitle)).setText("dd");
+
         return convertView;
     }
 }
