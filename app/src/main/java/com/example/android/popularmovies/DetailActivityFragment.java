@@ -3,9 +3,12 @@ package com.example.android.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,6 +26,7 @@ public class DetailActivityFragment extends Fragment {
     private TrailerListAdapter trailerListAdapter;
     MovieInfo curMovie;
     public static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
+    List<TrailersInfo> trailers;
 
     public DetailActivityFragment() {
     }
@@ -46,16 +50,17 @@ public class DetailActivityFragment extends Fragment {
 
 
 
+            //fav button click
+            Button button = (Button) rootView.findViewById(R.id.favButton);
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Do something in response to button click
+                    //Log.d(LOG_TAG, "onClick: ");
 
-//            Button button = (Button) rootView.findViewById(R.id.favButton);
-//            button.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//                    // Do something in response to button click
-//                    Log.d(LOG_TAG, "onClick: ");
-//
-//
-//                }
-//            });
+                    Log.v(LOG_TAG, "qqqqqqqqqqqqqqqqqq");
+
+                }
+            });
 
 
             //trailers
@@ -64,56 +69,36 @@ public class DetailActivityFragment extends Fragment {
 
             TrailersInfo tempTrailer = new TrailersInfo("The Revenant | Official Trailer [HD] | 20th Century FOX", "LoebZZ8K5N0");
 
-            List<TrailersInfo> trailers = new ArrayList<TrailersInfo>();
+            trailers = new ArrayList<TrailersInfo>();
             trailers.add(tempTrailer);
             trailerListAdapter = new TrailerListAdapter(getActivity(), trailers);
             ListView trailersList = (ListView)rootView.findViewById(R.id.listview_trailers);
             trailersList.setAdapter(trailerListAdapter);
 
+            //Button trailerButton = (Button) rootView.findViewById(R.id.playTrailerButton);
+            trailersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                    //String forecast = mForecastAdapter.getItem(i);
+                    //TrailersInfo trailer = (TrailersInfo)trailerListAdapter.getItem(i);
+                    //Bundle b = new Bundle();
+                    //b.putParcelable("curMovie", trailer);
+                    //MovieInfo m = new MovieInfo("As", "ASd", "As", "As", "As", "AS");
+                    //Intent intent = new Intent(getActivity(), DetailActivity.class).putExtra("curMovie", m);
+                    //startActivity(intent);
 
+                    Log.v(LOG_TAG, "ssssssssssssssssssssss ");
+                }
 
+            });
 
         }
-
-
-
-
-//
-//        //trailers
-//        TrailersInfo tempTrailer = new TrailersInfo("The Revenant | Official Trailer [HD] | 20th Century FOX", "LoebZZ8K5N0");
-//
-//        List<TrailersInfo> trailers = new ArrayList<TrailersInfo>();
-//        trailers.add(tempTrailer);
-//        trailerListAdapter = new TrailerListAdapter(getActivity(), trailers);
-//        ListView trailersList = (ListView)rootView.findViewById(R.id.listview_trailers);
-//        trailersList.setAdapter(trailerListAdapter);
-
-
-
-//        //Button trailerButton = (Button) rootView.findViewById(R.id.playTrailerButton);
-//        trailersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//                //TrailersInfo trailer = trailerListAdapter.getItem(i);
-//                TrailersInfo trailer = (TrailersInfo) trailerListAdapter.getItem(i);
-//                String UrlId = trailer.getTrailerUrl();
-//                watchYoutubeVideo(UrlId);
-//                //Bundle b = new Bundle();
-//                //b.putParcelable("curMovie", curMovie);
-//                //Intent intent = new Intent(getActivity(), DetailActivity.class).putExtra("curMovie", curMovie);
-//                //startActivity(intent);
-//            }
-//
-//        });
-
 
         return rootView;
     }
 
-
+//
 //    @Override
 //    public void onStart()
 //    {
@@ -123,7 +108,7 @@ public class DetailActivityFragment extends Fragment {
 //    }
 
 
-//
+
 //    public void watchYoutubeVideo(String id){
 //        try {
 //            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
