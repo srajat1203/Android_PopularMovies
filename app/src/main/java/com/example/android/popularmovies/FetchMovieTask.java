@@ -96,13 +96,13 @@ public class FetchMovieTask extends AsyncTask<String, Void, List<MovieInfo>>
         {
 
             mImageListAdapter.clear();
+            mImageListAdapter.notifyDataSetChanged();
             Log.i(LOG_TAG, "CLEAR called");
             for(MovieInfo movie: moviesList)
             {
                 mImageListAdapter.add(movie);
             }
             mImageListAdapter.notifyDataSetChanged();
-
 
         }
     }

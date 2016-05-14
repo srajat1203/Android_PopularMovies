@@ -41,14 +41,14 @@ public class ImageListAdapter extends ArrayAdapter {
             convertView = inflater.inflate(R.layout.grid_item_layout, parent, false);
             imgView = (ImageView) convertView.findViewById(R.id.gridViewItem);
             //convertView= (ImageView) rootView.findViewById(R.id.gridViewItem);
+
+
+            Picasso
+                    .with(context)
+                    .load(moviesList.get(position).getImageUrl())
+                            // will explain later
+                    .into((ImageView) imgView);
         }
-
-        Picasso
-                .with(context)
-                .load(moviesList.get(position).getImageUrl())
-                        // will explain later
-                .into((ImageView) imgView);
-
         return convertView;
     }
 }

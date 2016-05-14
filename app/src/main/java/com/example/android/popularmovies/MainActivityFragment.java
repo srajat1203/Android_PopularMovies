@@ -29,6 +29,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     Uri uri;
     private static final int DETAIL_LOADER = 0;
+    String mSortOrder;
 
     String[] MOVIE_PROJECTION = new String[] {
             ContentProvider.Movie.KEY_IMGURL,
@@ -80,8 +81,9 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             }
 
         });
-
-        uri = Uri.parse("content://com.example.android.popularmovies/movies");
+        mSortOrder = null;
+        //Log.i(LOG_TAG, "Create sort order is " +  mSortOrder);
+        //uri = Uri.parse("content://com.example.android.popularmovies/movies");
 
 
         return rootview;
@@ -91,20 +93,41 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public void onStart()
     {
         super.onStart();
-        getMovies();
+        String sortOder = Utilities.getPreferredOrder(getActivity());
+        if(mSortOrder == null)
+        {
+            mSortOrder = sortOder;
+            getMovies();
+            Log.i(LOG_TAG, "get movies called first time only");
+        }
+
+        if (mSortOrder != null && !sortOder.equals(mSortOrder)){
+            mSortOrder = sortOder;
+            getMovies();
+            Log.i(LOG_TAG, "get movies called");
+
+        }
+//        else if(!sortOder.equals(mSortOrder)) {
+//            mSortOrder = sortOder;
+//            getMovies();
+//            Log.i(LOG_TAG, "get movies called");
+//        }
 
     }
 
     public void getMovies(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sortOrder = prefs.getString(getString(R.string.pref_order_key), getString(R.string.pref_order_default));
-        if(sortOrder.equals("favorites")) {
+        //imageListAdapter.clear();
+        //imageListAdapter.notifyDataSetChanged();
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        //String sortOrder = prefs.getString(getString(R.string.pref_order_key), getString(R.string.pref_order_default));
+
+        if(mSortOrder.equals("favorites")) {
             getLoaderManager().initLoader(DETAIL_LOADER, null, this);
         }
         else{
-            Log.i(LOG_TAG, "MOVIETASKCALLED with sortorder" + sortOrder);
+            Log.i(LOG_TAG, "MOVIETASKCALLED with sortorder" + mSortOrder);
             FetchMovieTask fetchMovieTask = new FetchMovieTask(getActivity(), imageListAdapter);
-            fetchMovieTask.execute(sortOrder);
+            fetchMovieTask.execute(mSortOrder);
         }
 
     }
