@@ -131,7 +131,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
             trailerListAdapter = new TrailerListAdapter(getActivity(), trailers);
             trailersList = (ListView)rootView.findViewById(R.id.listview_trailers);
             trailersList.setAdapter(trailerListAdapter);
-            getListViewSize(trailersList);
+            //getListViewSize(trailersList);
 
 
             trailersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -174,13 +174,13 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
         FetchTrailersTask fetchTrailersTask = new FetchTrailersTask(getActivity(), trailerListAdapter);
         fetchTrailersTask.execute(curMovie);
-        getListViewSize(trailersList);
+        //getListViewSize(trailersList);
 
         FetchReviewsTask fetchReviewsTask = new FetchReviewsTask(getActivity(), reviewAdapter);
         fetchReviewsTask.execute(curMovie);
 
 
-        getListViewSize(reviewsListview);
+        //getListViewSize(reviewsListview);
 
     }
 

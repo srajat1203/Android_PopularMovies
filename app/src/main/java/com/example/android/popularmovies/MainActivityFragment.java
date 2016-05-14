@@ -47,6 +47,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     int INDEX_RELEASEDATE = 4;
     int INDEX_MOVIEID = 5;
 
+    List<MovieInfo> moviesList;
+
 
 
 
@@ -60,7 +62,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                              Bundle savedInstanceState) {
         View rootview =  inflater.inflate(R.layout.fragment_main, container, false);
 
-        List<MovieInfo> moviesList = new ArrayList<MovieInfo>();
+        moviesList = new ArrayList<MovieInfo>();
 
         imageListAdapter = new ImageListAdapter(getActivity(), moviesList);
         GridView gv = (GridView)rootview.findViewById(R.id.gridView);
@@ -116,10 +118,10 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     }
 
     public void getMovies(){
+
         //imageListAdapter.clear();
         //imageListAdapter.notifyDataSetChanged();
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        //String sortOrder = prefs.getString(getString(R.string.pref_order_key), getString(R.string.pref_order_default));
+
 
         if(mSortOrder.equals("favorites")) {
             getLoaderManager().initLoader(DETAIL_LOADER, null, this);
@@ -165,6 +167,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
         if (data != null && data.moveToFirst()) {
 
             String img = data.getString(INDEX_IMAGEURL);

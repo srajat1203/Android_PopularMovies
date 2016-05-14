@@ -1,6 +1,7 @@
 package com.example.android.popularmovies;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import java.util.List;
 
 public class ImageListAdapter extends ArrayAdapter {
     private Context context;
+    public static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     private LayoutInflater inflater;
 
     private List<MovieInfo> moviesList;
@@ -34,21 +36,21 @@ public class ImageListAdapter extends ArrayAdapter {
     }
 
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.i(LOG_TAG, "adapter called now");
         if (convertView == null) {
+            Log.i(LOG_TAG, "adapter called only");
             convertView = inflater.inflate(R.layout.grid_item_layout, parent, false);
             imgView = (ImageView) convertView.findViewById(R.id.gridViewItem);
             //convertView= (ImageView) rootView.findViewById(R.id.gridViewItem);
-
-
-            Picasso
-                    .with(context)
-                    .load(moviesList.get(position).getImageUrl())
-                            // will explain later
-                    .into((ImageView) imgView);
         }
+        Log.i(LOG_TAG, "img title is " + moviesList.get(position).getTitle());
+        Picasso
+                .with(context)
+                .load(moviesList.get(position).getImageUrl())
+                        // will explain later
+                .into((ImageView) imgView);
         return convertView;
     }
 }

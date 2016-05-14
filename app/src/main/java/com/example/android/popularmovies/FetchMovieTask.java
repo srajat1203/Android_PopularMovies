@@ -67,7 +67,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, List<MovieInfo>>
             //JSONObject ratingObject = movie.getJSONObject("vote_average");
             //JSONObject releaseDateObject = movie.getJSONObject("release_date");
 
-            imageUrl = "http://image.tmdb.org/t/p/w780/" + movie.getString("poster_path");
+            imageUrl = "http://image.tmdb.org/t/p/w185/" + movie.getString("poster_path");
             title = movie.getString("title");
             plot = movie.getString("overview");
             rating = movie.getString("vote_average");
@@ -96,12 +96,13 @@ public class FetchMovieTask extends AsyncTask<String, Void, List<MovieInfo>>
         {
 
             mImageListAdapter.clear();
-            mImageListAdapter.notifyDataSetChanged();
+            //mImageListAdapter.notifyDataSetChanged();
             Log.i(LOG_TAG, "CLEAR called");
             for(MovieInfo movie: moviesList)
             {
                 mImageListAdapter.add(movie);
             }
+            //mImageListAdapter.clear();
             mImageListAdapter.notifyDataSetChanged();
 
         }
