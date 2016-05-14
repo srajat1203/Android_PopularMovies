@@ -88,7 +88,18 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         //uri = Uri.parse("content://com.example.android.popularmovies/movies");
 
 
+
+        //clear db for now
+        //getContext().getContentResolver().delete(uri, null, null);
+
         return rootview;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        uri = Uri.parse("content://com.example.android.popularmovies/movies");
+        getLoaderManager().initLoader(DETAIL_LOADER, null, this);
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -100,13 +111,13 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         {
             mSortOrder = sortOder;
             getMovies();
-            Log.i(LOG_TAG, "get movies called first time only");
+            Log.i(LOG_TAG, "get movies called first time only " + mSortOrder );
         }
 
         if (mSortOrder != null && !sortOder.equals(mSortOrder)){
             mSortOrder = sortOder;
             getMovies();
-            Log.i(LOG_TAG, "get movies called");
+            Log.i(LOG_TAG, "get movies called " + mSortOrder);
 
         }
 //        else if(!sortOder.equals(mSortOrder)) {
@@ -117,6 +128,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     }
 
+
     public void getMovies(){
 
         //imageListAdapter.clear();
@@ -124,7 +136,10 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
 
         if(mSortOrder.equals("favorites")) {
-            getLoaderManager().initLoader(DETAIL_LOADER, null, this);
+            Log.i(LOG_TAG, "favorites called " + mSortOrder);
+            //uri = Uri.parse("content://com.example.android.popularmovies/movies");
+            //getLoaderManager().initLoader(DETAIL_LOADER, null, this);
+            getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
         }
         else{
             Log.i(LOG_TAG, "MOVIETASKCALLED with sortorder" + mSortOrder);
@@ -149,6 +164,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        Log.i(LOG_TAG, "CREATE LOADER CALLED");
 
         if ( null != uri ) {
             // Now create and return a CursorLoader that will take care of
@@ -167,8 +183,9 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        imageListAdapter.clear();
 
-        if (data != null && data.moveToFirst()) {
+        while (data != null && data.moveToNext()) {
 
             String img = data.getString(INDEX_IMAGEURL);
             String title = data.getString(INDEX_TITLE);
@@ -178,9 +195,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             String id = data.getString(INDEX_MOVIEID);
 
             Log.v(LOG_TAG, "img title plot rating rdate id " + img + " " + title + " " + plot + " " + rdate + " " + id);
-
             MovieInfo favMovie = new MovieInfo(img, title, plot, rating, rdate, id);
-
             imageListAdapter.add(favMovie);
 
         }

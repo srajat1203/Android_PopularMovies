@@ -42,9 +42,10 @@ public class ImageListAdapter extends ArrayAdapter {
         if (convertView == null) {
             Log.i(LOG_TAG, "adapter called only");
             convertView = inflater.inflate(R.layout.grid_item_layout, parent, false);
-            imgView = (ImageView) convertView.findViewById(R.id.gridViewItem);
+
             //convertView= (ImageView) rootView.findViewById(R.id.gridViewItem);
         }
+        imgView = (ImageView) convertView.findViewById(R.id.gridViewItem);
         Log.i(LOG_TAG, "img title is " + moviesList.get(position).getTitle());
         Picasso
                 .with(context)

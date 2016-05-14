@@ -94,11 +94,8 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
                     uri = Uri.parse("content://com.example.android.popularmovies/movies");
 
                     //CHECK IF ALREADY MARKED AS FAVORITE
-                    Cursor cursor = getContext().getContentResolver().query(uri, MOVIE_PROJECTION, ContentProvider.Movie.KEY_MOVIEID, new String[]{curMovie.getId()}, null);
-
-
+                    Cursor cursor = getContext().getContentResolver().query(uri, MOVIE_PROJECTION, ContentProvider.Movie.KEY_MOVIEID + " = ?", new String[]{curMovie.getId()}, null);
                     if(!cursor.moveToFirst()){
-
 
                         //INSERT INTO DB
                         ContentValues movieValue = new ContentValues();
@@ -111,6 +108,8 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
                         movieValue.put(ContentProvider.Movie.KEY_MOVIEID, curMovie.getId());
 
                         getContext().getContentResolver().insert(uri, movieValue);
+
+
                         //getContext().getContentResolver().query(uri, MOVIE_PROJECTION, null, null, null);
                         //ContentProvider a = MOVIE_PROJECTION[0];
 
