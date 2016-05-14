@@ -1,10 +1,15 @@
 package com.example.android.popularmovies;
 
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,13 +29,41 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DetailActivityFragment extends Fragment {
+public class DetailActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    Uri uri;
+    private static final int DETAIL_LOADER = 0;
+
+    String[] MOVIE_PROJECTION = new String[] {
+            ContentProvider.Movie.KEY_IMGURL,
+            ContentProvider.Movie.KEY_TITLE,
+            ContentProvider.Movie.KEY_PLOT,
+            ContentProvider.Movie.KEY_RATING,
+            ContentProvider.Movie.KEY_RELEASEDATE,
+            ContentProvider.Movie.KEY_MOVIEID,
+    };
+    // these indices must match the projection
+    int INDEX_IMAGEURL = 0;
+    int INDEX_TITLE = 1;
+    int INDEX_PLOT = 2;
+    int INDEX_RATING = 3;
+    int INDEX_RELEASEDATE = 4;
+    int INDEX_MOVIEID = 5;
+
+
+
 
     private TrailerListAdapter trailerListAdapter;
     ListView trailersList;
     MovieInfo curMovie;
     public static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     List<TrailersInfo> trailers;
+
+    List<MovieReview> reviews;
+    ReviewAdapter reviewAdapter;
+    ListView reviewsListview;
+
+    String movieId = null;
 
     public DetailActivityFragment() {
     }
@@ -54,50 +87,80 @@ public class DetailActivityFragment extends Fragment {
 
 
 
-            //fav button click
+            //FAV BUTTON CLICK
             Button button = (Button) rootView.findViewById(R.id.favButton);
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    // Do something in response to button click
-                    //Log.d(LOG_TAG, "onClick: ");
+                    uri = Uri.parse("content://com.example.android.popularmovies/movies");
 
-                    Log.v(LOG_TAG, "qqqqqqqqqqqqqqqqqq");
-                    //watchYoutubeVideo("LoebZZ8K5N0");
+                    //CHECK IF ALREADY MARKED AS FAVORITE
+                    Cursor cursor = getContext().getContentResolver().query(uri, MOVIE_PROJECTION, ContentProvider.Movie.KEY_MOVIEID, new String[]{curMovie.getId()}, null);
+
+
+                    if(!cursor.moveToFirst()){
+
+
+                        //INSERT INTO DB
+                        ContentValues movieValue = new ContentValues();
+
+                        movieValue.put(ContentProvider.Movie.KEY_IMGURL, curMovie.getImageUrl());
+                        movieValue.put(ContentProvider.Movie.KEY_TITLE, curMovie.getTitle());
+                        movieValue.put(ContentProvider.Movie.KEY_PLOT, curMovie.getPlot());
+                        movieValue.put(ContentProvider.Movie.KEY_RATING, curMovie.getRating());
+                        movieValue.put(ContentProvider.Movie.KEY_RELEASEDATE, curMovie.getReleaseDate());
+                        movieValue.put(ContentProvider.Movie.KEY_MOVIEID, curMovie.getId());
+
+                        getContext().getContentResolver().insert(uri, movieValue);
+                        //getContext().getContentResolver().query(uri, MOVIE_PROJECTION, null, null, null);
+                        //ContentProvider a = MOVIE_PROJECTION[0];
+
+//                        //String a = "saddasda";
+//                        String a = MOVIE_PROJECTION[0];
+//                        Log.v(LOG_TAG, "qmovie is: " + a);
+
+                        }
+
 
                 }
             });
 
 
-            //trailers
-
+            //TRAILERS
             ((TextView)rootView.findViewById(R.id.trailersTitle)).setText("Trailers:");
-
-            //TrailersInfo tempTrailer = new TrailersInfo("The Revenant | Official Trailer [HD] | 20th Century FOX", "LoebZZ8K5N0");
-
             trailers = new ArrayList<TrailersInfo>();
-            //trailers.add(tempTrailer);
             trailerListAdapter = new TrailerListAdapter(getActivity(), trailers);
             trailersList = (ListView)rootView.findViewById(R.id.listview_trailers);
             trailersList.setAdapter(trailerListAdapter);
-            //getListViewSize(trailersList);
+            getListViewSize(trailersList);
 
 
             trailersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                    //String forecast = mForecastAdapter.getItem(i);
-                    //TrailersInfo trailer = (TrailersInfo)trailerListAdapter.getItem(i);
-                    //Bundle b = new Bundle();
-                    //b.putParcelable("curMovie", trailer);
-                    //MovieInfo m = new MovieInfo("As", "ASd", "As", "As", "As", "AS");
-                    //Intent intent = new Intent(getActivity(), DetailActivity.class).putExtra("curMovie", m);
-                    //startActivity(intent);
-
-                    Log.v(LOG_TAG, "ssssssssssssssssssssss ");
+                    TrailersInfo trailer = (TrailersInfo) trailerListAdapter.getItem(i);
+                    String UrlId = trailer.getTrailerUrl();
+                    watchYoutubeVideo(UrlId);
                 }
 
             });
+
+
+            //REVIEWS
+            ((TextView)rootView.findViewById(R.id.reviewsTitle)).setText("Reviews:");
+            reviews = new ArrayList<MovieReview>();
+            //MovieReview tempr = new MovieReview("JK", "ROWLING, harry potter is great");
+            //reviews.add(tempr);
+            reviewAdapter = new ReviewAdapter(getActivity(), reviews);
+            reviewsListview = (ListView)rootView.findViewById(R.id.listview_reviews);
+            reviewsListview.setAdapter(reviewAdapter);
+            //getListViewSize(reviewsListview);
+
+
+
+
+
+
         }
 
         return rootView;
@@ -108,12 +171,57 @@ public class DetailActivityFragment extends Fragment {
     public void onStart()
     {
         super.onStart();
+
         FetchTrailersTask fetchTrailersTask = new FetchTrailersTask(getActivity(), trailerListAdapter);
         fetchTrailersTask.execute(curMovie);
         getListViewSize(trailersList);
 
+        FetchReviewsTask fetchReviewsTask = new FetchReviewsTask(getActivity(), reviewAdapter);
+        fetchReviewsTask.execute(curMovie);
+
+
+        getListViewSize(reviewsListview);
+
     }
 
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(DETAIL_LOADER, null, this);
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        if ( null != uri ) {
+            // Now create and return a CursorLoader that will take care of
+            // creating a Cursor for the data being displayed.
+            return new CursorLoader(
+                    getActivity(),
+                    uri,
+                    MOVIE_PROJECTION,
+                    null,
+                    null,
+                    null
+            );
+        }
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data != null && data.moveToFirst()) {
+
+                // Read description from cursor and update view
+                String title = data.getString(INDEX_TITLE);
+                Log.v(LOG_TAG, "loadertitle :" + title);
+                //data.moveToNext();
+            }
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) { }
 
 
     public void watchYoutubeVideo(String id){
@@ -146,8 +254,9 @@ public class DetailActivityFragment extends Fragment {
         params.height = totalHeight + (myListView.getDividerHeight() * (myListAdapter.getCount() - 1));
         myListView.setLayoutParams(params);
         // print height of adapter on log
-        Log.i(LOG_TAG, "height of listItem:"+ String.valueOf(totalHeight));
+        Log.i(LOG_TAG, "height of listItem:" + String.valueOf(totalHeight));
     }
+
 }
 
 

@@ -1,5 +1,8 @@
 package com.example.android.popularmovies;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 /**
  * Created by RajatSharma on 5/7/16.
  */
@@ -25,6 +28,13 @@ public class Utilities {
         return formattedVotes;
     }
 
+
+    public static String getPreferredOrder(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String sortOrder = prefs.getString(context.getString(R.string.pref_order_key), context.getString(R.string.pref_order_default));
+        return sortOrder;
+    }
 
 
 }

@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.android.popularmovies.DetailActivityFragment">
 
-    <android.support.design.widget.VisibilityAwareImageButton
+    <ImageView
         android:layout_width="60dp"
         android:layout_height="58dp"
         android:src="@drawable/trailer_button_image"
@@ -18,7 +18,6 @@
         android:layout_height="match_parent"
         android:layout_weight="7"
         android:id="@+id/trailerTitle"
-        android:text="as"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:gravity="center_vertical"
         android:clickable="true"/>

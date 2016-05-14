@@ -9,6 +9,10 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String mSortOrder;
+
+    public static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        mSortOrder = Utilities.getPreferredOrder(this);
     }
 
     @Override
@@ -43,4 +47,20 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        String sortOder = Utilities.getPreferredOrder(this);
+//        // update the location in our second pane using the fragment manager
+//        if (sortOder != null && !sortOder.equals(mSortOrder)) {
+//            MainActivityFragment maf = (MainActivityFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_main);
+//            if ( null != maf ) {
+//                maf.onOrderChanged();
+//                Log.i(LOG_TAG, "onOrderChanged called");
+//            }
+//            mSortOrder = sortOder;
+//
+//        }
+//    }
 }
