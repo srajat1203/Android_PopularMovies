@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.LayoutInflater;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by RajatSharma on 5/9/16.
@@ -174,8 +176,20 @@ public class FetchTrailersTask extends AsyncTask<MovieInfo, Void, List<TrailersI
             for(TrailersInfo trailer: trailersList)
             {
                 mTrailerListAdapter.add(trailer);
+
+                //View item = mTrailerListAdapter.getView(trailer, null, null);
             }
+
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+
+
         }
+//            if ( null != maf ) {
+//                maf.onOrderChanged();
+//                Log.i(LOG_TAG, "onOrderChanged called");
+//            }
+
+
     }
 
 

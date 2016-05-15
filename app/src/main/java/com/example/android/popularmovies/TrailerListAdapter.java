@@ -37,6 +37,7 @@ public class TrailerListAdapter extends ArrayAdapter {
 
         }
 
+
         return convertView;
     }
 }

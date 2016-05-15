@@ -1,35 +1,23 @@
 package com.example.android.popularmovies;
 
 import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DetailActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DetailActivityFragment extends Fragment {
 
     Uri uri;
     private static final int DETAIL_LOADER = 0;
@@ -73,98 +61,110 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        Intent intent = getActivity().getIntent();
-        if(intent != null && intent.hasExtra("curMovie")){
-
-            curMovie = (MovieInfo)intent.getSerializableExtra("curMovie");
-
-            ImageView imageView = (ImageView)rootView.findViewById(R.id.poster);
-            Picasso.with(getActivity()).load(curMovie.getImageUrl()).into(imageView);
-            ((TextView) rootView.findViewById(R.id.title)).setText(curMovie.getTitle());
-            ((TextView) rootView.findViewById(R.id.plot)).setText(curMovie.getPlot());
-            ((TextView) rootView.findViewById(R.id.rdate)).setText(Utilities.detailDateFormatter(curMovie.getReleaseDate()));
-            ((TextView) rootView.findViewById(R.id.votes)).setText(Utilities.voteFormatter(curMovie.getRating()));
-
-
-
-            //FAV BUTTON CLICK
-            Button button = (Button) rootView.findViewById(R.id.favButton);
-            button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    uri = Uri.parse("content://com.example.android.popularmovies/movies");
-
-                    //CHECK IF ALREADY MARKED AS FAVORITE
-                    Cursor cursor = getContext().getContentResolver().query(uri, MOVIE_PROJECTION, ContentProvider.Movie.KEY_MOVIEID + " = ?", new String[]{curMovie.getId()}, null);
-                    if(!cursor.moveToFirst()){
-
-                        //INSERT INTO DB
-                        ContentValues movieValue = new ContentValues();
-
-                        movieValue.put(ContentProvider.Movie.KEY_IMGURL, curMovie.getImageUrl());
-                        movieValue.put(ContentProvider.Movie.KEY_TITLE, curMovie.getTitle());
-                        movieValue.put(ContentProvider.Movie.KEY_PLOT, curMovie.getPlot());
-                        movieValue.put(ContentProvider.Movie.KEY_RATING, curMovie.getRating());
-                        movieValue.put(ContentProvider.Movie.KEY_RELEASEDATE, curMovie.getReleaseDate());
-                        movieValue.put(ContentProvider.Movie.KEY_MOVIEID, curMovie.getId());
-
-                        getContext().getContentResolver().insert(uri, movieValue);
-
-
-                        //getContext().getContentResolver().query(uri, MOVIE_PROJECTION, null, null, null);
-                        //ContentProvider a = MOVIE_PROJECTION[0];
-
-//                        //String a = "saddasda";
-//                        String a = MOVIE_PROJECTION[0];
-//                        Log.v(LOG_TAG, "qmovie is: " + a);
-
-                        }
-
-
-                }
-            });
-
-
-            //TRAILERS
-            ((TextView)rootView.findViewById(R.id.trailersTitle)).setText("Trailers:");
-            trailers = new ArrayList<TrailersInfo>();
-            trailerListAdapter = new TrailerListAdapter(getActivity(), trailers);
-            trailersList = (ListView)rootView.findViewById(R.id.listview_trailers);
-            trailersList.setAdapter(trailerListAdapter);
-            //getListViewSize(trailersList);
-
-
-            trailersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                    TrailersInfo trailer = (TrailersInfo) trailerListAdapter.getItem(i);
-                    String UrlId = trailer.getTrailerUrl();
-                    watchYoutubeVideo(UrlId);
-                }
-
-            });
-
-
-            //REVIEWS
-            ((TextView)rootView.findViewById(R.id.reviewsTitle)).setText("Reviews:");
-            reviews = new ArrayList<MovieReview>();
-            //MovieReview tempr = new MovieReview("JK", "ROWLING, harry potter is great");
-            //reviews.add(tempr);
-            reviewAdapter = new ReviewAdapter(getActivity(), reviews);
-            reviewsListview = (ListView)rootView.findViewById(R.id.listview_reviews);
-            reviewsListview.setAdapter(reviewAdapter);
-            //getListViewSize(reviewsListview);
-
-
-
-
-
-
-        }
+//        Intent intent = getActivity().getIntent();
+//        if(intent != null && intent.hasExtra("curMovie")){
+//
+//            curMovie = (MovieInfo)intent.getSerializableExtra("curMovie");
+//
+//            ImageView imageView = (ImageView)rootView.findViewById(R.id.poster);
+//            Picasso.with(getActivity()).load(curMovie.getImageUrl()).into(imageView);
+//            ((TextView) rootView.findViewById(R.id.title)).setText(curMovie.getTitle());
+//            ((TextView) rootView.findViewById(R.id.plot)).setText(curMovie.getPlot());
+//            ((TextView) rootView.findViewById(R.id.rdate)).setText(Utilities.detailDateFormatter(curMovie.getReleaseDate()));
+//            ((TextView) rootView.findViewById(R.id.votes)).setText(Utilities.voteFormatter(curMovie.getRating()));
+//
+//
+//
+//
+//
+//            //FAV BUTTON CLICK
+//            Button button = (Button) rootView.findViewById(R.id.favButton);
+//            button.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+//                    uri = Uri.parse("content://com.example.android.popularmovies/movies");
+//
+//                    //CHECK IF ALREADY MARKED AS FAVORITE
+//                    Cursor cursor = getContext().getContentResolver().query(uri, MOVIE_PROJECTION, ContentProvider.Movie.KEY_MOVIEID + " = ?", new String[]{curMovie.getId()}, null);
+//                    if (!cursor.moveToFirst()) {
+//
+//                        //INSERT INTO DB
+//                        ContentValues movieValue = new ContentValues();
+//
+//                        movieValue.put(ContentProvider.Movie.KEY_IMGURL, curMovie.getImageUrl());
+//                        movieValue.put(ContentProvider.Movie.KEY_TITLE, curMovie.getTitle());
+//                        movieValue.put(ContentProvider.Movie.KEY_PLOT, curMovie.getPlot());
+//                        movieValue.put(ContentProvider.Movie.KEY_RATING, curMovie.getRating());
+//                        movieValue.put(ContentProvider.Movie.KEY_RELEASEDATE, curMovie.getReleaseDate());
+//                        movieValue.put(ContentProvider.Movie.KEY_MOVIEID, curMovie.getId());
+//
+//                        getContext().getContentResolver().insert(uri, movieValue);
+//
+//
+//                        //getContext().getContentResolver().query(uri, MOVIE_PROJECTION, null, null, null);
+//                        //ContentProvider a = MOVIE_PROJECTION[0];
+//
+////                        //String a = "saddasda";
+////                        String a = MOVIE_PROJECTION[0];
+////                        Log.v(LOG_TAG, "qmovie is: " + a);
+//
+//                    }
+//
+//
+//                }
+//            });
+//
+//
+//            //TRAILERS
+//            ((TextView)rootView.findViewById(R.id.trailersTitle)).setText("Trailers:");
+//            trailers = new ArrayList<TrailersInfo>();
+//            trailerListAdapter = new TrailerListAdapter(getActivity(), trailers);
+//            trailersList = (ListView)rootView.findViewById(R.id.listview_trailers);
+//            trailersList.setAdapter(trailerListAdapter);
+//
+//            //getListViewSize(trailersList);
+//
+//
+//
+//            //View mLinearView = inflater.inflate(R.layout.listview_reviews_item, null);
+//
+//
+//
+//
+//            trailersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//                    TrailersInfo trailer = (TrailersInfo) trailerListAdapter.getItem(i);
+//                    String UrlId = trailer.getTrailerUrl();
+//                    watchYoutubeVideo(UrlId);
+//                }
+//
+//            });
+//
+//
+//            //REVIEWS
+//            ((TextView)rootView.findViewById(R.id.reviewsTitle)).setText("Reviews:");
+//            reviews = new ArrayList<MovieReview>();
+//            //MovieReview tempr = new MovieReview("JK", "ROWLING, harry potter is great");
+//            //reviews.add(tempr);
+//            reviewAdapter = new ReviewAdapter(getActivity(), reviews);
+//            reviewsListview = (ListView)rootView.findViewById(R.id.listview_reviews);
+//            reviewsListview.setAdapter(reviewAdapter);
+//            //getListViewSize(reviewsListview);
+//
+//
+//
+//
+//
+//
+//        }
 
         return rootView;
     }
 
+    public void TrailersUpdated(){
+        getListViewSize(trailersList);
+    }
 
     @Override
     public void onStart()
@@ -173,54 +173,52 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
         FetchTrailersTask fetchTrailersTask = new FetchTrailersTask(getActivity(), trailerListAdapter);
         fetchTrailersTask.execute(curMovie);
-        //getListViewSize(trailersList);
+        getListViewSize(trailersList);
 
         FetchReviewsTask fetchReviewsTask = new FetchReviewsTask(getActivity(), reviewAdapter);
         fetchReviewsTask.execute(curMovie);
-
-
-        //getListViewSize(reviewsListview);
+        getListViewSize(reviewsListview);
 
     }
 
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(DETAIL_LOADER, null, this);
-        super.onActivityCreated(savedInstanceState);
-    }
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        getLoaderManager().initLoader(DETAIL_LOADER, null, this);
+//        super.onActivityCreated(savedInstanceState);
+//    }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if ( null != uri ) {
-            // Now create and return a CursorLoader that will take care of
-            // creating a Cursor for the data being displayed.
-            return new CursorLoader(
-                    getActivity(),
-                    uri,
-                    MOVIE_PROJECTION,
-                    null,
-                    null,
-                    null
-            );
-        }
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data != null && data.moveToFirst()) {
-
-                // Read description from cursor and update view
-                String title = data.getString(INDEX_TITLE);
-                Log.v(LOG_TAG, "loadertitle :" + title);
-                //data.moveToNext();
-            }
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) { }
+//    @Override
+//    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+//        if ( null != uri ) {
+//            // Now create and return a CursorLoader that will take care of
+//            // creating a Cursor for the data being displayed.
+//            return new CursorLoader(
+//                    getActivity(),
+//                    uri,
+//                    MOVIE_PROJECTION,
+//                    null,
+//                    null,
+//                    null
+//            );
+//        }
+//        return null;
+//    }
+//
+//    @Override
+//    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+//        if (data != null && data.moveToFirst()) {
+//
+//                // Read description from cursor and update view
+//                String title = data.getString(INDEX_TITLE);
+//                Log.v(LOG_TAG, "loadertitle :" + title);
+//                //data.moveToNext();
+//            }
+//
+//    }
+//
+//    @Override
+//    public void onLoaderReset(Loader<Cursor> loader) { }
 
 
     public void watchYoutubeVideo(String id){
@@ -257,6 +255,12 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     }
 
 }
-
+//
+//<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+//        xmlns:tools="http://schemas.android.com/tools"
+//        android:layout_width="match_parent"
+//        android:layout_height="match_parent"
+//        tools:context="com.example.android.popularmovies.DetailActivityFragment"
+//        tools:showIn="@layout/activity_detail"
 
 

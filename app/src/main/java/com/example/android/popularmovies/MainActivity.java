@@ -11,7 +11,9 @@ public class MainActivity extends AppCompatActivity {
 
     private String mSortOrder;
 
-    public static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
+    public static final String LOG_TAG = MainActivity.class.getSimpleName();
+
+    boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +21,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        if(findViewById(R.id.fragment_detail) != null){
+            mTwoPane = true;
+
+//            if(savedInstanceState == null){
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.fragment_detail, new DetailActivityFragment())
+//                        .commit();
+//            }
+        }
+        else{
+            mTwoPane = false;
+        }
 
         mSortOrder = Utilities.getPreferredOrder(this);
     }
