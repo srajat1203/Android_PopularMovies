@@ -7,13 +7,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback {
 
     private String mSortOrder;
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     boolean mTwoPane;
+
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +28,11 @@ public class MainActivity extends AppCompatActivity {
         if(findViewById(R.id.fragment_detail) != null){
             mTwoPane = true;
 
-//            if(savedInstanceState == null){
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.fragment_detail, new DetailActivityFragment())
-//                        .commit();
-//            }
+            if(savedInstanceState == null){
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_detail, new DetailActivityFragment())
+                        .commit();
+            }
         }
         else{
             mTwoPane = false;
@@ -62,6 +64,28 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(MovieInfo movieInfo) {
+
+        if(mTwoPane){
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("curMovie", movieInfo);
+
+            DetailActivityFragment fragment = new DetailActivityFragment();
+            fragment.setArguments(bundle);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_detail, fragment, DETAILFRAGMENT_TAG)
+                    .commit();
+        }
+        else{
+            Intent intent = new Intent(this, DetailActivity.class).putExtra("curMovie", movieInfo);
+            startActivity(intent);
+        }
+
     }
 
 //    @Override

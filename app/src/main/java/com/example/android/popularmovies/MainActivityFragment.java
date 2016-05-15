@@ -1,6 +1,5 @@
 package com.example.android.popularmovies;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,6 +48,15 @@ public class MainActivityFragment extends Fragment {
 
     public static final String LOG_TAG = MainActivityFragment.class.getSimpleName();
     private ImageListAdapter imageListAdapter;
+
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(MovieInfo movieInfo);
+    }
+
+
     public MainActivityFragment() {
     }
 
@@ -72,8 +80,7 @@ public class MainActivityFragment extends Fragment {
                 MovieInfo curMovie = (MovieInfo) imageListAdapter.getItem(i);
                 //Bundle b = new Bundle();
                 //b.putParcelable("curMovie", curMovie);
-                Intent intent = new Intent(getActivity(), DetailActivity.class).putExtra("curMovie", curMovie);
-                startActivity(intent);
+                ((Callback) getActivity()).onItemSelected(curMovie);
 
             }
 

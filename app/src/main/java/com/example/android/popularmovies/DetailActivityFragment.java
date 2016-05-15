@@ -29,6 +29,7 @@ import java.util.List;
 public class DetailActivityFragment extends Fragment {
 
     Uri uri;
+
     private static final int DETAIL_LOADER = 0;
 
     String[] MOVIE_PROJECTION = new String[] {
@@ -70,11 +71,18 @@ public class DetailActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        Intent intent = getActivity().getIntent();
-        if(intent != null && intent.hasExtra("curMovie")){
 
-            curMovie = (MovieInfo)intent.getSerializableExtra("curMovie");
+        //Intent intent = getActivity().getIntent();
+        // if(intent != null && intent.hasExtra("curMovie"))
+        Bundle bundle = this.getArguments();
 
+        if(bundle != null) {
+
+            //Log.i(LOG_TAG, "Getting here");
+            //curMovie = (MovieInfo)intent.getSerializableExtra("curMovie");
+            curMovie = bundle.getParcelable("curMovie");
+        }
+        if(curMovie != null){
             ImageView imageView = (ImageView)rootView.findViewById(R.id.poster);
             Picasso.with(getActivity()).load(curMovie.getImageUrl()).into(imageView);
             ((TextView) rootView.findViewById(R.id.title)).setText(curMovie.getTitle());
@@ -180,14 +188,15 @@ public class DetailActivityFragment extends Fragment {
     {
         super.onStart();
 
-        FetchTrailersTask fetchTrailersTask = new FetchTrailersTask(getActivity(), trailerListAdapter);
-        fetchTrailersTask.execute(curMovie);
-        getListViewSize(trailersList);
+        if(curMovie != null) {
+            FetchTrailersTask fetchTrailersTask = new FetchTrailersTask(getActivity(), trailerListAdapter);
+            fetchTrailersTask.execute(curMovie);
+            //getListViewSize(trailersList);
 
-        FetchReviewsTask fetchReviewsTask = new FetchReviewsTask(getActivity(), reviewAdapter);
-        fetchReviewsTask.execute(curMovie);
-        getListViewSize(reviewsListview);
-
+            FetchReviewsTask fetchReviewsTask = new FetchReviewsTask(getActivity(), reviewAdapter);
+            fetchReviewsTask.execute(curMovie);
+            //getListViewSize(reviewsListview);
+        }
     }
 
 
