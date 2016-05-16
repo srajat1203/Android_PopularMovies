@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -25,23 +24,22 @@ public class DetailActivity extends AppCompatActivity {
 
 
             Intent intent = this.getIntent();
-            if(intent != null && intent.hasExtra("curMovie"))
-            {
-                curMovie = (MovieInfo)intent.getSerializableExtra("curMovie");
+            if(intent != null && intent.hasExtra("curMovie")) {
+                curMovie = (MovieInfo) intent.getSerializableExtra("curMovie");
 
-                Log.i(LOG_TAG, "Getting here " + curMovie.getTitle());
+                // Log.i(LOG_TAG, "Getting here " + curMovie.getTitle());
+
+
+                Bundle arguments = new Bundle();
+                arguments.putSerializable("curMovie", curMovie);
+
+                DetailActivityFragment fragment = new DetailActivityFragment();
+                fragment.setArguments(arguments);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_detail, fragment)
+                        .commit();
             }
-
-
-            Bundle arguments = new Bundle();
-            arguments.putSerializable("curMovie", curMovie);
-
-            DetailActivityFragment fragment = new DetailActivityFragment();
-            fragment.setArguments(arguments);
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_detail, fragment)
-                    .commit();
         }
     }
 

@@ -78,9 +78,9 @@ public class DetailActivityFragment extends Fragment {
 
         if(bundle != null) {
 
-            //Log.i(LOG_TAG, "Getting here");
+            Log.i(LOG_TAG, "Getting here");
             //curMovie = (MovieInfo)intent.getSerializableExtra("curMovie");
-            curMovie = bundle.getParcelable("curMovie");
+            curMovie = (MovieInfo)bundle.getSerializable("curMovie");
         }
         if(curMovie != null){
             ImageView imageView = (ImageView)rootView.findViewById(R.id.poster);
@@ -191,11 +191,11 @@ public class DetailActivityFragment extends Fragment {
         if(curMovie != null) {
             FetchTrailersTask fetchTrailersTask = new FetchTrailersTask(getActivity(), trailerListAdapter);
             fetchTrailersTask.execute(curMovie);
-            //getListViewSize(trailersList);
+            getListViewSize(trailersList);
 
             FetchReviewsTask fetchReviewsTask = new FetchReviewsTask(getActivity(), reviewAdapter);
             fetchReviewsTask.execute(curMovie);
-            //getListViewSize(reviewsListview);
+            getListViewSize(reviewsListview);
         }
     }
 

@@ -27,12 +27,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
         if(findViewById(R.id.fragment_detail) != null){
             mTwoPane = true;
-
-            if(savedInstanceState == null){
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_detail, new DetailActivityFragment())
-                        .commit();
-            }
+//
+//            if(savedInstanceState == null){
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.fragment_detail, new DetailActivityFragment())
+//                        .commit();
+//            }
         }
         else{
             mTwoPane = false;
