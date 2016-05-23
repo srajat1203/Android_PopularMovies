@@ -38,48 +38,49 @@ public class FetchMovieTask extends AsyncTask<String, Void, List<MovieInfo>>
     private List<MovieInfo> getMovieDataFromJson(String moviesJsonStr)
             throws JSONException {
 
-        // These are the names of the JSON objects that need to be extracted.
-        final String M_RESULTS = "results";
-
-
-        JSONObject moviesJson = new JSONObject(moviesJsonStr);
-        JSONArray moviesArray = moviesJson.getJSONArray(M_RESULTS);
-
 
         List<MovieInfo> moviesList = new ArrayList<MovieInfo>();
 
+        if(moviesJsonStr != null){
 
-        for(int i = 0; i < moviesArray.length(); i++) {
-            // For now, using the format "Day, description, hi/low"
-            String imageUrl;
-            String title;
-            String plot;
-            String rating;
-            String releaseDate;
-            String id;
+            // These are the names of the JSON objects that need to be extracted.
+            final String M_RESULTS = "results";
+            JSONObject moviesJson = new JSONObject(moviesJsonStr);
+            JSONArray moviesArray = moviesJson.getJSONArray(M_RESULTS);
 
-            // Get the JSON object representing the day
-            JSONObject movie = moviesArray.getJSONObject(i);
 
-            //JSONObject posterObject = movie.get("poster_path");
-            //JSONObject titleObject = movie.getJSONObject("title");
-            //JSONObject plotObject = movie.getJSONObject("overview");
-            //JSONObject ratingObject = movie.getJSONObject("vote_average");
-            //JSONObject releaseDateObject = movie.getJSONObject("release_date");
+            for(int i = 0; i < moviesArray.length(); i++) {
+                // For now, using the format "Day, description, hi/low"
+                String imageUrl;
+                String title;
+                String plot;
+                String rating;
+                String releaseDate;
+                String id;
 
-            imageUrl = "http://image.tmdb.org/t/p/w500/" + movie.getString("poster_path");
-            title = movie.getString("title");
-            plot = movie.getString("overview");
-            rating = movie.getString("vote_average");
-            releaseDate = movie.getString("release_date");
-            id = movie.getString("id");
+                // Get the JSON object representing the day
+                JSONObject movie = moviesArray.getJSONObject(i);
 
-            MovieInfo movieInfo = new MovieInfo(imageUrl, title, plot, rating, releaseDate, id);
+                //JSONObject posterObject = movie.get("poster_path");
+                //JSONObject titleObject = movie.getJSONObject("title");
+                //JSONObject plotObject = movie.getJSONObject("overview");
+                //JSONObject ratingObject = movie.getJSONObject("vote_average");
+                //JSONObject releaseDateObject = movie.getJSONObject("release_date");
 
-            //highAndLow = formatHighLows(high, low);
-            //resultStrs[i] = day + " - " + description + " - " + highAndLow;
+                imageUrl = "http://image.tmdb.org/t/p/w500/" + movie.getString("poster_path");
+                title = movie.getString("title");
+                plot = movie.getString("overview");
+                rating = movie.getString("vote_average");
+                releaseDate = movie.getString("release_date");
+                id = movie.getString("id");
 
-            moviesList.add(movieInfo);
+                MovieInfo movieInfo = new MovieInfo(imageUrl, title, plot, rating, releaseDate, id);
+
+                //highAndLow = formatHighLows(high, low);
+                //resultStrs[i] = day + " - " + description + " - " + highAndLow;
+
+                moviesList.add(movieInfo);
+            }
         }
 
         for (MovieInfo movie : moviesList) {
